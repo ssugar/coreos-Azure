@@ -32,13 +32,10 @@ Modify the following fields:
 			# generate a new token for each unique cluster from https://discovery.etcd.io/new?size=X
 			# specify the initial size of your cluster with ?size=X
 			discovery: https://discovery.etcd.io/<token>
-			# multi-region and multi-cloud deployments need to use $public_ipv4
-			advertise-client-urls: http://$private_ipv4:2379,http://$private_ipv4:4001
-			initial-advertise-peer-urls: http://$private_ipv4:2380
-			# listen on both the official ports and the legacy ports
-			# legacy ports can be omitted if your application doesn't depend on them
-			listen-client-urls: http://0.0.0.0:2379,http://0.0.0.0:4001
-			listen-peer-urls: http://$private_ipv4:2380
+			advertise-client-urls: http://$public_ipv4:2379
+			initial-advertise-peer-urls: http://$public_ipv4:2380
+			listen-client-urls: http://0.0.0.0:2379
+			listen-peer-urls: http://0.0.0.0:2380
 		  units:
 			- name: etcd2.service
 			  command: start
@@ -60,16 +57,24 @@ Modify the following fields:
 
 ####Create the cloud service
 
-    azure service create coreosX
+    azure service create coreosA
+	
+	azure service create coreosB
 
 ####Bring up the VMs
 
-Both nodes will be connected to the same cloud service so they can discover each other.  I couldn't get fleet to work when VMs were connected to separate services.
-
 First Node:
 
-    azure vm create --custom-data=cloud-config.yaml --ssh=22 --vm-name=node-1 --connect=coreosX 2b171e93f07c4903bcad35bda10acf22__CoreOS-Stable-766.3.0 core
+    azure vm create --custom-data=cloud-config.yaml --ssh=22 --vm-name=coreosA --connect=coreosA 2b171e93f07c4903bcad35bda10acf22__CoreOS-Stable-766.3.0 core
 
 Second Node:
 
-    azure vm create --custom-data=cloud-config.yaml --ssh=2222 --vm-name=node-2 --connect=coreosX 2b171e93f07c4903bcad35bda10acf22__CoreOS-Stable-766.3.0 core
+    azure vm create --custom-data=cloud-config.yaml --ssh=22 --vm-name=coreosB --connect=coreosB 2b171e93f07c4903bcad35bda10acf22__CoreOS-Stable-766.3.0 core
+
+####Open up the VM endpoints
+
+    azure vm endpoint create coreosA 2379 2379
+    azure vm endpoint create coreosA 2380 2380
+
+    azure vm endpoint create coreosB 2379 2379
+    azure vm endpoint create coreosB 2380 2380
