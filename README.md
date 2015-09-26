@@ -1,31 +1,29 @@
 # coreos-Azure
 
 ##Setup
+This is setting up a 2-node CoreOS cluster running in Azure in seperate cloud services.
 
 ####Create SSH public/private key pair
 [Instructions](https://winscp.net/eng/docs/ui_puttygen)
 
 [Information](http://the.earth.li/~sgtatham/putty/0.60/htmldoc/Chapter8.html)
 
+Also take the SSH public key \(which looks like ssh-rsa AAAA\.\.\.\.\) and put it into a file named public.key.  public.key should be placed in the same directory you run the azure vm create commands from.
+
 ####Install Azure xplat cli
 [Instructions](https://azure.microsoft.com/en-us/documentation/articles/xplat-cli/)
 
 ####Clone this repo
+Clone this repo into the the same directory you run the azure create vm commands from.
+
 	git clone https://github.com/ssugar/coreos-Azure
 
 ####Modify the cloud-config.yaml
 
 Modify the following fields:
- - hostname: change X to the node number
- - ssh_authorized_keys: you can use normal RSA SSH public key format
- - discovery: change \<token\> to the token you generate at https://discovery.etcd.io/new?size=X where X = the desired size of your new cluster
+ - discovery: change \<token\> to the token you generate at https://discovery.etcd.io/new?size=2 where 2 = the desired size of your new cluster
 
 		#cloud-config
-
-		hostname: node-X
-
-		ssh_authorized_keys:
-		  - ssh-rsa AAAAA......
 
 		coreos:
 		  etcd2:
@@ -42,19 +40,6 @@ Modify the following fields:
 			- name: fleet.service
 			  command: start
 		  
-		write_files:
-		  - path: /etc/ssh/sshd_config
-			permissions: 0600
-			owner: root:root
-			content: |
-			  # Use most defaults for sshd configuration.
-			  UsePrivilegeSeparation sandbox
-			  Subsystem sftp internal-sftp
-			  PermitRootLogin no
-			  AllowUsers core
-			  PasswordAuthentication no
-			  ChallengeResponseAuthentication no
-
 ####Create the cloud service
 
     azure service create coreosA
@@ -65,11 +50,11 @@ Modify the following fields:
 
 First Node:
 
-    azure vm create --custom-data=cloud-config.yaml --ssh=22 --vm-name=coreosA --connect=coreosA 2b171e93f07c4903bcad35bda10acf22__CoreOS-Stable-766.3.0 core
+    azure vm create --custom-data=cloud-config.yaml --ssh=22 --ssh-cert=public.key --no-ssh-password --vm-name=coreosA --connect=coreosA 2b171e93f07c4903bcad35bda10acf22__CoreOS-Stable-766.3.0 core
 
 Second Node:
 
-    azure vm create --custom-data=cloud-config.yaml --ssh=22 --vm-name=coreosB --connect=coreosB 2b171e93f07c4903bcad35bda10acf22__CoreOS-Stable-766.3.0 core
+    azure vm create --custom-data=cloud-config.yaml --ssh=22 --ssh-cert=public.key --no-ssh-password --vm-name=coreosB --connect=coreosB 2b171e93f07c4903bcad35bda10acf22__CoreOS-Stable-766.3.0 core
 
 ####Open up the VM endpoints
 

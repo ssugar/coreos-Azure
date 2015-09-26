@@ -1,8 +1,5 @@
 #cloud-config
 
-ssh_authorized_keys:
-  - ssh-rsa AAA...
-
 coreos:
   etcd2:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new?size=3
@@ -19,18 +16,7 @@ coreos:
       command: start
       
 write_files:
-  - path: /etc/ssh/sshd_config
-    permissions: 0600
-    owner: root:root
-    content: |
-      # Use most defaults for sshd configuration.
-      UsePrivilegeSeparation sandbox
-      Subsystem sftp internal-sftp
-      PermitRootLogin no
-      AllowUsers core
-      PasswordAuthentication no
-      ChallengeResponseAuthentication no
-  - path: /srv/logstash/config
+  - path: /srv/logstash/config/logstash.conf
     permissions: '0755'
     content: |
       input {
