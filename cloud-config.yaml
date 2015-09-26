@@ -1,13 +1,13 @@
 #cloud-config
 
-hostname: coreosX
+hostname: node-X
 
 ssh_authorized_keys:
-  - ssh-rsa <key>
+  - ssh-rsa AAA...
 
 coreos:
   etcd2:
-    # generate a new token for each unique cluster from https://discovery.etcd.io/new?size=3
+    # generate a new token for each unique cluster from https://discovery.etcd.io/new?size=2
     # specify the initial size of your cluster with ?size=X
     discovery: https://discovery.etcd.io/<token>
     # multi-region and multi-cloud deployments need to use $public_ipv4
