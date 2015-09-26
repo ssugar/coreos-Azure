@@ -4,6 +4,7 @@
 
 ####Create SSH public/private key pair
 [Instructions](https://winscp.net/eng/docs/ui_puttygen)
+
 [Information](http://the.earth.li/~sgtatham/putty/0.60/htmldoc/Chapter8.html)
 
 ####Install Azure xplat cli
@@ -17,7 +18,7 @@
 Modify the following fields:
  - hostname: change X to the node number
  - ssh_authorized_keys: you can use normal RSA SSH public key format
- - discovery: change \<token\> to the token you generate when going to https://discovery.etcd.io/new?size=X where X = the desired size of your cluster
+ - discovery: change \<token\> to the token you generate at https://discovery.etcd.io/new?size=X where X = the desired size of your new cluster
 
 		#cloud-config
 
