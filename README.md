@@ -3,10 +3,14 @@
 ##Setup
 
 ####Create SSH public/private key pair
+(Instructions)[https://winscp.net/eng/docs/ui_puttygen]
+http://the.earth.li/~sgtatham/putty/0.60/htmldoc/Chapter8.html
 
 ####Install Azure xplat cli
+https://azure.microsoft.com/en-us/documentation/articles/xplat-cli/
 
 ####Clone this repo
+	git clone https://github.com/ssugar/coreos-Azure
 
 ####Modify the cloud-config.yaml
 
