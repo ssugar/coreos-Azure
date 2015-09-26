@@ -13,7 +13,7 @@
 Modify the following fields:
  - hostname: change X to the node number
  - ssh_authorized_keys: you can use normal RSA SSH public key format
- - discovery: change <token> to the token you generate when going to https://discovery.etcd.io/new?size=X where X = the desired size of your cluster
+ - discovery: change \<token\> to the token you generate when going to https://discovery.etcd.io/new?size=X where X = the desired size of your cluster
 
 		#cloud-config
 
